@@ -1,9 +1,14 @@
 const todoListRepository = require('../repositories/todoListRepository')
 
 exports.listAllTodos = function (req, res) {
-    const todoList = todoListRepository.listAllTodos()
-    //console.log(todoList)
-    res.json(todoList)
+    console.log('function', todoListRepository.listAllTodos)
+    todoListRepository.listAllTodos((result)=>{
+        console.log(result)
+        res.json(result)
+        return result
+    })
+    
+    
 }
 exports.createTodo = function(req, res) {
     todoListRepository.createTodo(req.body)
