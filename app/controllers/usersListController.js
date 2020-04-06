@@ -1,3 +1,4 @@
+const JwtUtil = require('../../jwt')
 const usersListRepository = require('../repositories/usersListRepository')
 
 exports.loginUsers = function (req, res) {
@@ -20,8 +21,11 @@ exports.loginUsers = function (req, res) {
             res.json(resdata)
         } else {
             if (result[0].password == params.password) {
+                var jwt = new JwtUtil(params.username)
+                var token = jwt.generateToken()
                 resdata.code = 200
                 resdata.success = true
+                resdata.token = token
                 resdata.msg = "登录成功"
                 res.json(resdata)
             } else {

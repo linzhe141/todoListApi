@@ -1,3 +1,4 @@
+const JwtUtil = require('../../jwt')
 const  studentRepository = require('../repositories/studentRepository')
 
 exports.studentHomework = function (req, res) {
@@ -6,10 +7,10 @@ exports.studentHomework = function (req, res) {
         username
     }
     studentRepository.listLoginUsers(params, (result)=>{
-        /* console.log(result[0])
+        console.log(result[0])
         console.log(result[0].password+'->')
         console.log(params.password+'->')
-        console.log(result[0].password == params.password) */
+        console.log(result[0].password == params.password)
         var resdata = {}
         if (result.length == 0){
             resdata.code = 200
@@ -18,6 +19,9 @@ exports.studentHomework = function (req, res) {
             res.json(resdata)
         } else {
             if (result[0].password == params.password) {
+                var jwt = new JwtUtil(params.username)
+                var token = jwt.generateToken()
+                console.log('token--->',token)
                 resdata.code = 200
                 resdata.success = true
                 resdata.msg = "登录成功"
