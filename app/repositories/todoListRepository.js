@@ -13,7 +13,7 @@ class TodoListRepository {
         this.todoList = [todo1, todo2]
     }
     //实现查看所有todos的方法
-    listAllTodos(callback) {
+    listAllTodos(params,callback) {
         console.log('callback', callback)
         conn.query(sqlMap.list, function (err, result){
             if (err) throw err
