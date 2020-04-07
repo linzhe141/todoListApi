@@ -1,6 +1,7 @@
 const JwtUtil = require('../../jwt')
-const  studentRepository = require('../repositories/studentRepository')
-
+const studentRepository = require('../repositories/studentRepository')
+const formidable = require('formidable')
+const fs = require('fs')
 exports.studentHomework = function (req, res) {
     var username = req.body.username
     var params = {
@@ -36,6 +37,44 @@ exports.studentHomework = function (req, res) {
     })
     
     
+}
+
+exports.upload = function (req, res) {
+    var params = {
+        username: req.body.username
+    }
+    var form = new formidable.IncomingForm()
+    form.uploadDir = '/Users/linzhe/Desktop/RESTful/todoListApi/app/stufile/upload'
+    console.log(form)
+    console.log(1111)
+    form.parse(req, function(error, fields, files) {
+        console.log('fields', fields)
+        for (var key in files) {
+            var file = files[key];
+            var fName = (new Date()).getTime();
+            switch (file.type) {
+                case "image/jpeg":
+                    fName = fName + ".jpg";
+                    break;
+                case "image/png":
+                    fName = fName + ".png";
+                    break;
+                default:
+                    fName = fName + ".png";
+                    break;
+            }
+            console.log(file, file.size);
+            var uploadDir = "/Users/linzhe/Desktop/RESTful/todoListApi/app/stufile/upload/" + fName;
+            fs.rename(file.path, uploadDir, function(err) {
+                if (err) {
+                    res.write(err + "\n");
+                    res.end();
+                }
+                res.json('上传成功')
+            })
+
+        }
+    });
 }
 
 exports.listAllUsers = function (req, res) {

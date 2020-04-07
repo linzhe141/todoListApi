@@ -1,11 +1,15 @@
 module.exports = function(app){
     const usersList = require('../controllers/usersListController')
     const score = require('../controllers/scoreController')
+    const student = require('../controllers/studentController')
     app.route('/login')
         .post(usersList.loginUsers)
 
-    app.route('/home')
+    app.route('/stuHomework')
         .post(score.findStuHomeworkBy)
+
+    app.route('/upload')
+        .post(student.upload)
 
     app.route('/users')
         .get(usersList.listAllUsers)

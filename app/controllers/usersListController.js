@@ -2,6 +2,7 @@ const JwtUtil = require('../../jwt')
 const usersListRepository = require('../repositories/usersListRepository')
 
 exports.loginUsers = function (req, res) {
+    //var token = req.headers.token
     var username = req.body.username
     var password = req.body.password
     var params = {
