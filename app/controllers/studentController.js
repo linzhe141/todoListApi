@@ -52,6 +52,7 @@ exports.upload = function (req, res) {
         for (var key in files) {
             var file = files[key];
             var fName = (new Date()).getTime();
+            console.log('----->',file.type)
             switch (file.type) {
                 case "image/jpeg":
                     fName = fName + ".jpg";
@@ -59,11 +60,19 @@ exports.upload = function (req, res) {
                 case "image/png":
                     fName = fName + ".png";
                     break;
+                case "application/pdf":
+                    fName = fName + ".pdf";
+                    break;
+                case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+                    fName = fName + ".docx";
+                    break;
+                case "application/msword":
+                    fName = fName + ".doc";
+                    break;
                 default:
                     fName = fName + ".png";
                     break;
             }
-            console.log(file, file.size);
             var uploadDir = "/Users/linzhe/Desktop/RESTful/todoListApi/app/stufile/upload/" + fName;
             fs.rename(file.path, uploadDir, function(err) {
                 if (err) {
