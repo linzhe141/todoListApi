@@ -8,6 +8,9 @@ module.exports = function(app){
     app.route('/stuHomework')
         .post(score.findStuHomeworkBy)
 
+    app.route('/download')
+        .post(student.download)
+
     app.route('/upload')
         .post(student.upload)
 

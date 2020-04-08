@@ -2,6 +2,7 @@ const JwtUtil = require('../../jwt')
 const studentRepository = require('../repositories/studentRepository')
 const formidable = require('formidable')
 const fs = require('fs')
+var fileUrl = '/Users/linzhe/Desktop/RESTful/todoListApi/app/stufile/upload'
 exports.studentHomework = function (req, res) {
     var username = req.body.username
     var params = {
@@ -44,7 +45,7 @@ exports.upload = function (req, res) {
         username: req.body.username
     }
     var form = new formidable.IncomingForm()
-    form.uploadDir = '/Users/linzhe/Desktop/RESTful/todoListApi/app/stufile/upload'
+    form.uploadDir = fileUrl
     console.log(form)
     console.log(1111)
     form.parse(req, function(error, fields, files) {
@@ -84,6 +85,21 @@ exports.upload = function (req, res) {
 
         }
     });
+}
+exports.download = function (req, res) {
+    var filename = req.body.filename;
+    var file = fileUrl + '/' + filename;
+    res.writeHead(200, {
+        'Content-Type': 'application/octet-stream',//告诉浏览器这是一个二进制文件
+        'Content-Disposition': 'attachment; filename=' + encodeURI(filename),//告诉浏览器这是一个需要下载的文件
+    });//设置响应头
+    var readStream = fs.createReadStream(file);//得到文件输入流
+    readStream.on('data', (chunk) => {
+        res.write(chunk, 'binary');//文档内容以二进制的格式写到response的输出流
+    });
+    readStream.on('end', () => {
+        res.end();
+    })
 }
 
 exports.listAllUsers = function (req, res) {
