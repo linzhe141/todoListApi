@@ -1,24 +1,28 @@
-const Student = require('../models/student')
+const Teacher = require('../models/teacher')
 const mysql = require('mysql')
 const mysqlOption = require('../config/db') 
 const conn = mysql.createConnection(mysqlOption.mysql)
 const sqlMap = require('../dao/sqlMap')
 
-class StudentRepository {
+class TeacherRepository {
     constructor(){
         
     }
-    //查看stu列表
-    listStuClass(params, callback){
-        conn.query(sqlMap.listStuClass, [params.classID], function(err, result){
+    //查看teacher列表
+    listTeacher(params, callback){
+        
+    }
+    
+    //实现通过教工号查看具体教师的方法 
+    teacherInfo(params, callback) {
+        conn.query(sqlMap.teacherInfo, [params.username], function(err, result){
             if(err) throw err
+            console.log('具体教师信息-->',result)
             callback(JSON.parse(JSON.stringify(result)))
         })
     }
-    
-    //实现通过stuid查看具体作业的方法 
-    findUsersBy(id) {
-        conn.query(sqlMap.studentById, [params.username], function(err, result){
+    teacherClassOptions(params,callback){
+        conn.query(sqlMap.teacherClassinfo, [params.username], function(err, result){
             if(err) throw err
             callback(JSON.parse(JSON.stringify(result)))
         })
@@ -36,4 +40,4 @@ class StudentRepository {
 
     }
 }
-module.exports = new StudentRepository()
+module.exports = new TeacherRepository()

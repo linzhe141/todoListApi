@@ -1,5 +1,6 @@
 const JwtUtil = require('../../jwt')
 const studentRepository = require('../repositories/studentRepository')
+const scoreRepository = require('../repositories/scoreRepository')
 const formidable = require('formidable')
 const fs = require('fs')
 var fileUrl = '/Users/linzhe/Desktop/RESTful/todoListApi/app/stufile/upload'
@@ -41,39 +42,14 @@ exports.studentHomework = function (req, res) {
 }
 
 exports.upload = function (req, res) {
-    var params = {
-        username: req.body.username
-    }
     var form = new formidable.IncomingForm()
     form.uploadDir = fileUrl
-    console.log(form)
-    console.log(1111)
     form.parse(req, function(error, fields, files) {
-        console.log('fields', fields)
+        console.log('fields-->',fields)
         for (var key in files) {
             var file = files[key];
-            var fName = (new Date()).getTime();
-            console.log('----->',file.type)
-            switch (file.type) {
-                case "image/jpeg":
-                    fName = fName + ".jpg";
-                    break;
-                case "image/png":
-                    fName = fName + ".png";
-                    break;
-                case "application/pdf":
-                    fName = fName + ".pdf";
-                    break;
-                case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
-                    fName = fName + ".docx";
-                    break;
-                case "application/msword":
-                    fName = fName + ".doc";
-                    break;
-                default:
-                    fName = fName + ".png";
-                    break;
-            }
+            // 时间  学号  文件
+            var fName = (new Date()).getTime() + '+'+fields.username +file.name;
             var uploadDir = "/Users/linzhe/Desktop/RESTful/todoListApi/app/stufile/upload/" + fName;
             fs.rename(file.path, uploadDir, function(err) {
                 if (err) {
@@ -81,6 +57,12 @@ exports.upload = function (req, res) {
                     res.end();
                 }
                 res.json('上传成功')
+                var params = {
+                    fileInfo: fName,
+                    hwID: fields.hwID,
+                    stuID: fields.username
+                }
+                scoreRepository.updateScoreFile(params)
             })
 
         }

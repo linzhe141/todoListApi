@@ -9,11 +9,8 @@ exports.loginUsers = function (req, res) {
         username,
         password
     }
+    console.log(params)
     usersListRepository.listLoginUsers(params, (result)=>{
-        /* console.log(result[0])
-        console.log(result[0].password+'->')
-        console.log(params.password+'->')
-        console.log(result[0].password == params.password) */
         var resdata = {}
         if (result.length == 0){
             resdata.code = 200
