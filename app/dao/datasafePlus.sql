@@ -14,7 +14,7 @@
  Date: 03/05/2020 21:08:16
 */
 
-SET NAMES utf8mb4;
+SET NAMES utf8;
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- ----------------------------
@@ -31,7 +31,7 @@ CREATE TABLE `certificationinfo` (
   `opresult` char(20) DEFAULT NULL,
   `opcontent` char(20) DEFAULT NULL,
   UNIQUE KEY `test` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- ----------------------------
 -- Records of certificationinfo
@@ -71,9 +71,9 @@ COMMIT;
 DROP TABLE IF EXISTS `classgrade`;
 CREATE TABLE `classgrade` (
   `classID` int(11) NOT NULL,
-  `className` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `className` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   PRIMARY KEY (`classID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- ----------------------------
 -- Records of classgrade
@@ -89,9 +89,9 @@ COMMIT;
 DROP TABLE IF EXISTS `course`;
 CREATE TABLE `course` (
   `courseID` varchar(255) NOT NULL,
-  `courseName` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `courseName` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   PRIMARY KEY (`courseID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- ----------------------------
 -- Records of course
@@ -107,10 +107,10 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `courseClass`;
 CREATE TABLE `courseClass` (
-  `courseID` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `courseID` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `classID` int(255) NOT NULL,
   PRIMARY KEY (`courseID`,`classID`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- ----------------------------
 -- Records of courseClass
@@ -130,15 +130,15 @@ COMMIT;
 DROP TABLE IF EXISTS `homework`;
 CREATE TABLE `homework` (
   `hwID` int(255) NOT NULL AUTO_INCREMENT,
-  `courseID` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `hwName` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `courseID` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `hwName` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `hwDesc` varchar(255) DEFAULT NULL,
   `hwContent` varchar(255) DEFAULT NULL,
   `startDate` date DEFAULT NULL,
   `endDate` date DEFAULT NULL,
   `hwFile` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`hwID`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=20200089 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=20200089 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- ----------------------------
 -- Records of homework
@@ -157,9 +157,9 @@ COMMIT;
 DROP TABLE IF EXISTS `hwClass`;
 CREATE TABLE `hwClass` (
   `hwID` int(255) NOT NULL AUTO_INCREMENT,
-  `classID` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `classID` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   PRIMARY KEY (`hwID`,`classID`)
-) ENGINE=InnoDB AUTO_INCREMENT=20200089 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=20200089 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- ----------------------------
 -- Records of hwClass
@@ -180,12 +180,12 @@ CREATE TABLE `score` (
   `hwID` int(255) NOT NULL,
   `stuID` varchar(255) NOT NULL,
   `score` varchar(255) DEFAULT NULL,
-  `stuHwFile` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `stuHwFile` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `comments` varchar(255) DEFAULT NULL,
   `state` int(255) DEFAULT '0',
   `resultFile` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`hwID`,`stuID`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- ----------------------------
 -- Records of score
@@ -210,13 +210,13 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `students`;
 CREATE TABLE `students` (
-  `stuID` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `stuID` varchar(40) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `stuName` varchar(255) NOT NULL,
   `stuAge` int(255) NOT NULL,
   `stuGender` varchar(255) NOT NULL,
   `classID` int(255) DEFAULT NULL,
   PRIMARY KEY (`stuID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- ----------------------------
 -- Records of students
@@ -233,13 +233,13 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `teachers`;
 CREATE TABLE `teachers` (
-  `tchID` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `tchName` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `tchID` varchar(40) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `tchName` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `tchAge` int(255) NOT NULL,
-  `tchGender` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `tchGender` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `courseID` varchar(255) NOT NULL,
   PRIMARY KEY (`tchID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- ----------------------------
 -- Records of teachers
@@ -255,11 +255,11 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
-  `username` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `username` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `password` varchar(20) NOT NULL,
   `permissions` int(11) NOT NULL,
   PRIMARY KEY (`username`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- ----------------------------
 -- Records of users

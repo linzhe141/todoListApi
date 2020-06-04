@@ -8,32 +8,46 @@ class StudentRepository {
     constructor(){
         
     }
-    //查看stu列表
     listStuClass(params, callback){
         conn.query(sqlMap.listStuClass, [params.classID], function(err, result){
             if(err) throw err
             callback(JSON.parse(JSON.stringify(result)))
         })
     }
-    
-    //实现通过stuid查看具体作业的方法 
+    listStudent(callback){
+        conn.query(sqlMap.listStudent,function(err,result){
+            if(err) throw err
+            callback(JSON.parse(JSON.stringify(result)))
+        })
+    }
     findUsersBy(id) {
         conn.query(sqlMap.studentById, [params.username], function(err, result){
             if(err) throw err
             callback(JSON.parse(JSON.stringify(result)))
         })
     }
-    //实现创建新users记录的方法
-    createUsers(usersBody){
-
+    findStudentBy(id,callback){
+        conn.query(sqlMap.findStudentBy,[id],function(err,result){
+            if(err) throw err
+            callback(JSON.parse(JSON.stringify(result)))
+        })
     }
-    //实现通过id和一个更新对象来更新users记录的方法
-    updateUsers(id, upate) {
-
+    createStudent(params,callback){
+        
+        conn.query(sqlMap.createStudent,[params.stuID,params.stuName,
+            params.stuAge,params.stuGender,params.classID],function(err,result){
+               
+                callback(JSON.parse(JSON.stringify(result)))
+            }).on('error',function(err){
+                console.log('fdsfsa-->',err)
+            })
     }
-    //实现通过id来删除users记录的方法
-    deleteUsersBy(id) {
-
+    
+    deleteStudent(id,callback) {
+        conn.query(sqlMap.deleteStudent,[id],function(err,result){
+            if(err) throw err
+            callback(JSON.parse(JSON.stringify(result)))
+        })
     }
 }
 module.exports = new StudentRepository()

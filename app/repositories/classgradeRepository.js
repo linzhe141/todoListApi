@@ -21,15 +21,27 @@ class ClassgradeRepository {
             callback(JSON.parse(JSON.stringify(result)))
         })
     }
-    //实现创建新users记录的方法
+    listClassgrade(callback){
+        conn.query(sqlMap.classgradeList,function (err,result) { 
+            if(err) throw err
+            callback(JSON.parse(JSON.stringify(result)))
+        })
+    }
+    readClassgrade(params,callback){
+        conn.query(sqlMap.findClassgradeBy,[params],function(err,result){
+            if(err) throw err
+            callback(JSON.parse(JSON.stringify(result)))
+        })
+    }
+   
     createUsers(usersBody){
 
     }
-    //实现通过id和一个更新对象来更新users记录的方法
+    
     updateUsers(id, upate) {
 
     }
-    //实现通过id来删除users记录的方法
+   
     deleteUsersBy(id) {
 
     }

@@ -8,7 +8,7 @@ class HomeworkRepository {
     constructor(){
         
     }
-    //查看作业列表
+    
     listHomework(params, callback){
         conn.query(sqlMap.loginUser, [params.username], function(err, result){
             if(err) throw err

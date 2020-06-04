@@ -5,8 +5,10 @@ const homeworkClassReopsitory = require('../repositories/homeworkClassReopsitory
 const formidable = require('formidable')
 const studentRepository = require('../repositories/studentRepository')
 const scoreRepository = require('../repositories/scoreRepository')
+const usersListRepository =require('../repositories/usersListRepository')
 const fs = require('fs')
-var fileUrl = '/Users/linzhe/Desktop/RESTful/todoListApi/app/teacherfile/upload'
+// var fileUrl = '/Users/linzhe/Desktop/RESTful/todoListApi/app/teacherfile/upload'
+var fileUrl = 'C:\\Users\\linzh\\Desktop\\todoListApi\\app\\teacherfile\\upload'
 exports.teacherInfo = function (req, res) {
     // get请求 req.query 中
     // post 请求 req.body 中
@@ -54,7 +56,7 @@ exports.createHomework = function (req, res) {
             var file = files.file;
             // 时间  作业名  文件
             var fName = (new Date()).getTime() + '+' + fields.hwName + "+" + file.name;
-            var uploadDir = "/Users/linzhe/Desktop/RESTful/todoListApi/app/teacherfile/upload/" + fName;
+            var uploadDir = 'C:\\Users\\linzh\\Desktop\\todoListApi\\app\\teacherfile\\upload\\' + fName;
             params.hwFile = fName
             fs.rename(file.path, uploadDir, function (err) {
                 if (err) {
@@ -77,8 +79,7 @@ exports.createHomework = function (req, res) {
                             scoreRepository.createScore({
                                 hwID: result[0]['max(hwID)'],
                                 stuID: item.stuID
-                            }, function (result) {
-                            })
+                            }, function (result) {})
                         })
 
                     })
@@ -192,19 +193,18 @@ exports.download = function (req, res) {
     var filename = req.body.filename;
     var file = fileUrl + '/' + filename;
     res.writeHead(200, {
-        'Content-Type': 'application/octet-stream', //告诉浏览器这是一个二进制文件
-        'Content-Disposition': 'attachment; filename=' + encodeURI(filename), //告诉浏览器这是一个需要下载的文件
-    }); //设置响应头
-    var readStream = fs.createReadStream(file); //得到文件输入流
+        'Content-Type': 'application/octet-stream', 
+        'Content-Disposition': 'attachment; filename=' + encodeURI(filename), 
+    }); 
+    var readStream = fs.createReadStream(file); 
     readStream.on('data', (chunk) => {
-        res.write(chunk, 'binary'); //文档内容以二进制的格式写到response的输出流
+        res.write(chunk, 'binary');
     });
     readStream.on('end', () => {
         res.end();
     })
 }
-exports.updateScore = function(req,res){
-    console.log(req.body)
+exports.updateScore = function (req, res) {
     var params = {
         hwID: req.body.hwID,
         stuID: req.body.stuID,
@@ -213,7 +213,7 @@ exports.updateScore = function(req,res){
         comments: req.body.comments,
         resultFile: req.body.resultFile
     }
-    scoreRepository.updateScore(params,(result)=>{
+    scoreRepository.updateScore(params, (result) => {
         var resdata = {}
         if (result.length != 0) {
             resdata.code = 200
@@ -224,12 +224,12 @@ exports.updateScore = function(req,res){
     })
 }
 
-exports.updateHomework = function(req,res){
+exports.updateHomework = function (req, res) {
     var params = {
         hwID: req.body.hwID,
         endDate: req.body.endDate
     }
-    homeworkRepository.updateHomework(params,(result)=>{
+    homeworkRepository.updateHomework(params, (result) => {
         var resdata = {}
         if (result.length != 0) {
             resdata.code = 200
@@ -238,4 +238,61 @@ exports.updateHomework = function(req,res){
             res.json(resdata)
         }
     })
+}
+
+exports.listTeacher = function (req, res) {
+    teacherRepository.listTeacher((result) => {
+        var resdata = {}
+        if (result.length != 0) {
+            resdata.code = 200
+            resdata.success = true
+            resdata.data = result
+            res.json(resdata)
+        }
+    })
+}
+
+exports.readTeacher = function (req, res) {
+    teacherRepository.findTeacherBy(req.params.tchName, (result) => {
+        var resdata = {}
+        if (result.length != 0) {
+            resdata.code = 200
+            resdata.success = true
+            resdata.data = result
+            res.json(resdata)
+        }
+    })
+}
+
+exports.addTeacher = function (req, res) {
+    teacherRepository.createTeacher(req.body, (result) => {
+        var params = {
+            username: req.body.tchID,
+            password: req.body.tchID,
+            permissions: 1
+        }
+        usersListRepository.createUsers(params,(result)=>{
+            var resdata = {}
+            resdata.code = 200
+            resdata.success = true
+            resdata.msg = '教师创建成功'
+            res.json(resdata)
+        })
+        
+    })
+}
+
+exports.deleteTeacher = function(req, res) {
+    console.log(req.params.tchID)
+    teacherRepository.deleteTeacherBy(req.params.tchID,result=>{
+        console.log(result)
+        var resdata = {}
+        if (result.length != 0) {
+            resdata.code = 200
+            resdata.success = true
+            resdata.data = '成功删除用户'
+            res.json(resdata)
+        }
+    })
+   
 }

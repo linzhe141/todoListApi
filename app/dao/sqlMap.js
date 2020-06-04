@@ -3,6 +3,35 @@ var sqlMap = {
     deleteById: 'delete from user where id = ?',
     update: 'update user set username=?, password=? where id=?',
     usersList: 'select * from users',
+    classgradeList: 'select * from classgrade',
+    listStudent: 'select * from students',
+    listTeachers: `select teachers.tchID,teachers.tchName,
+            teachers.tchAge,teachers.tchGender,course.courseName
+            from teachers,course
+            WHERE teachers.courseID = course.courseID`,
+    findUserBy: `select * from users
+            WHERE username = ?`,
+    createTeacher: `insert into teachers(tchID,tchName,tchAge,tchGender,courseID) 
+            values(?,?,?,?,?)`,
+    createStudent: `insert into students(stuID,stuName,stuAge,stuGender,classID) 
+            values(?,?,?,?,?)`,
+    findClassgradeBy: `select * from classgrade
+            WHERE classID = ?`,
+    findTeacherBy: `select teachers.tchID,teachers.tchName,
+            teachers.tchAge,teachers.tchGender,course.courseName
+            from teachers,course
+            WHERE teachers.courseID = course.courseID
+            AND teachers.tchName = ?`,
+    findStudentBy: `select * from students
+            WHERE stuID = ?`,
+    resetPassword: `UPDATE users set password = ? 
+            WHERE username = ?`,
+    deleteUser: `DELETE from users 
+                WHERE username = ?`,
+    deleteTeacher: `DELETE from teachers 
+            WHERE tchID = ?`,
+    deleteStudent: `DELETE from students 
+            WHERE stuID = ?`,
     getById: 'select * from user where id = ?',
     loginUser: 'select * from users where username = ?',
     studentById: 'select * from students where stuID = ?',
@@ -26,6 +55,8 @@ var sqlMap = {
                 AND teachers.tchID = ?`,
     createHomework: `insert into homework(courseID,hwName,hwDesc,hwContent,startDate,endDate,hwFile) 
                 values(?,?,?,?,?,?,?)`,
+    createUsers: `INSERT INTO users(username,password,permissions)
+                VALUES(?,?,?)`,
     createScore: `INSERT INTO score(hwID,stuID) VALUES(?,?)`,
     createHwClass: `INSERT INTO hwClass(classID) VALUES(?)`,
     teacherClassinfo: `SELECT classgrade.classID, classgrade.className FROM teachers,courseClass,course,classgrade
@@ -51,7 +82,7 @@ var sqlMap = {
                 AND homework.hwID = ?
                 GROUP BY students.stuID`,
     listHomework: ``,
-    getMaxHwID:`SELECT  max(hwID)  FROM  homework;`,
+    getMaxHwID: `SELECT  max(hwID)  FROM  homework;`,
     updateScore: `update score set state=?,score=?,comments=?,resultFile=? 
                 where hwID=?
                 and stuID=?`,
@@ -59,8 +90,11 @@ var sqlMap = {
                 where hwID=?
                 and stuID=?
                 `,
-    updateHomework: `update homework set endDate = ? where hwID= ?`
-    
+    updateHomework: `update homework set endDate = ? where hwID= ?`,
+
+    changePwd: `UPDATE users set password = ?
+                WHERE username = ?`,
+
 };
 
 module.exports = sqlMap;

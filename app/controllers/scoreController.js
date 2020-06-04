@@ -1,8 +1,9 @@
 const formatter = require('../../tools')
 const scoreRepository = require('../repositories/scoreRepository')
 var fs = require('fs')
-var fileUrl = '/Users/linzhe/Desktop/RESTful/todoListApi/app/teacherfile/upload'
-// 查看全部作业信息
+// var fileUrl = '/Users/linzhe/Desktop/RESTful/todoListApi/app/teacherfile/upload'
+var fileUrl = 'C:\\Users\\linzh\\Desktop\\todoListApi\\app\\teacherfile\\upload'
+
 exports.findStuHomeworkBy = function (req, res) {
     var username = req.body.username
     scoreRepository.findStuHomeworkBy(username, (result) => {
@@ -35,9 +36,9 @@ exports.findStuHomeworkBy = function (req, res) {
         }
     })
 }
-// 查看具体作业信息
+
 exports.StuHomeworkSpec = function (req, res) {
-    //console.log('req --> 具体作业', req)
+ 
     var params = {
         hwID: req.query.hwID,
         stuID: req.query.stuID
@@ -54,7 +55,6 @@ exports.StuHomeworkSpec = function (req, res) {
 }
 exports.uploadScoreResultFile = function(req,res){
     var imgData = req.body.imgData
-    console.log(req.body)
     var base64Data = imgData.replace(/^(data:image\/png\;base64,)/,'')
     var dataBuffer = new Buffer(base64Data,'base64')
     fs.writeFile(fileUrl+'/'+req.body.hwID+'+'+req.body.stuID+'.png',dataBuffer,function(err){

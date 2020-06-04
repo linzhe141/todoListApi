@@ -1,9 +1,12 @@
 const JwtUtil = require('../../jwt')
 const studentRepository = require('../repositories/studentRepository')
 const scoreRepository = require('../repositories/scoreRepository')
+const usersListRepository =require('../repositories/usersListRepository')
 const formidable = require('formidable')
 const fs = require('fs')
-var fileUrl = '/Users/linzhe/Desktop/RESTful/todoListApi/app/stufile/upload'
+// var fileUrl = '/Users/linzhe/Desktop/RESTful/todoListApi/app/stufile/upload'
+var fileUrl = 'C:\\Users\\linzh\\Desktop\\todoListApi\\app\\stufile\\upload'
+var fileUrlTeacher = 'C:\\Users\\linzh\\Desktop\\todoListApi\\app\\teacherfile\\upload'
 exports.studentHomework = function (req, res) {
     var username = req.body.username
     var params = {
@@ -45,18 +48,18 @@ exports.upload = function (req, res) {
     var form = new formidable.IncomingForm()
     form.uploadDir = fileUrl
     form.parse(req, function(error, fields, files) {
-        console.log('fields-->',fields)
+        console.log('fields-->',files)
         for (var key in files) {
             var file = files[key];
             // 时间  学号  文件
             var fName = (new Date()).getTime() + '+'+fields.username +file.name;
-            var uploadDir = "/Users/linzhe/Desktop/RESTful/todoListApi/app/stufile/upload/" + fName;
+            console.log(fName)
+            var uploadDir = 'C:\\Users\\linzh\\Desktop\\todoListApi\\app\\stufile\\upload\\' + fName;
             fs.rename(file.path, uploadDir, function(err) {
                 if (err) {
                     res.write(err + "\n");
                     res.end();
                 }
-                res.json('上传成功')
                 var params = {
                     fileInfo: fName,
                     hwID: fields.hwID,
@@ -72,44 +75,84 @@ exports.download = function (req, res) {
     var filename = req.body.filename;
     var file = fileUrl + '/' + filename;
     res.writeHead(200, {
-        'Content-Type': 'application/octet-stream',//告诉浏览器这是一个二进制文件
-        'Content-Disposition': 'attachment; filename=' + encodeURI(filename),//告诉浏览器这是一个需要下载的文件
-    });//设置响应头
-    var readStream = fs.createReadStream(file);//得到文件输入流
+        'Content-Type': 'application/octet-stream',
+        'Content-Disposition': 'attachment; filename=' + encodeURI(filename),
+    });
+    var readStream = fs.createReadStream(file);
     readStream.on('data', (chunk) => {
-        res.write(chunk, 'binary');//文档内容以二进制的格式写到response的输出流
+        res.write(chunk, 'binary');
+    });
+    readStream.on('end', () => {
+        res.end();
+    })
+}
+exports.downloadResultFile = function (req, res) {
+    var filename = req.body.filename;
+    var file = fileUrlTeacher + '/' + filename;
+    res.writeHead(200, {
+        'Content-Type': 'application/octet-stream',
+        'Content-Disposition': 'attachment; filename=' + encodeURI(filename),
+    });
+    var readStream = fs.createReadStream(file);
+    readStream.on('data', (chunk) => {
+        res.write(chunk, 'binary');
     });
     readStream.on('end', () => {
         res.end();
     })
 }
 
-exports.listAllUsers = function (req, res) {
-    console.log('function', usersListRepository.listAllUsers)
-    usersListRepository.listAllUsers((result)=>{
-        console.log(result)
-        res.json(result)
-        return result
+exports.listStudent = function (req, res) {
+    studentRepository.listStudent((result)=>{
+        var resdata = {}
+        if (result.length != 0) {
+            resdata.code = 200
+            resdata.success = true
+            resdata.data = result
+            res.json(resdata)
+        }
     })
     
     
 }
-exports.createUsers = function(req, res) {
-    usersListRepository.createUsers(req.body)
-    res.status(201).end()
+exports.addStudent = function(req, res) {
+    studentRepository.createStudent(req.body, (result) => {
+        var params = {
+            username: req.body.stuID,
+            password: req.body.stuID,
+            permissions: 2
+        }
+        usersListRepository.createUsers(params,(result)=>{
+            var resdata = {}
+            resdata.code = 200
+            resdata.success = true
+            resdata.msg = '学生创建成功'
+            res.json(resdata)
+        })
+        
+    })
 }
-exports.readUsers = function(req, res) {
-    const users = usersListRepository.findUsersBy(req.params.usersID)
-    console.log(users)
-    res.json(users)
+exports.readStudent = function(req, res) {
+    studentRepository.findStudentBy(req.params.stuID,(result)=>{
+        var resdata = {}
+        if (result.length != 0) {
+            resdata.code = 200
+            resdata.success = true
+            resdata.data = result
+            res.json(resdata)
+        }
+    })
 }
-exports.updateUsers = function(req, res) {
-    const users = usersListRepository.updateUsers(req.params.usersID,req.body)
-    res.json(users)
-}
-exports.deleteUsers = function(req, res) {
-    usersListRepository.deleteUsersBy(req.params.usersID)
-    res.json({
-        message: 'Users successfully deleted'
+
+exports.deleteStudent = function(req, res) {
+    studentRepository.deleteStudent(req.params.stuID,result=>{
+        console.log(result)
+        var resdata = {}
+        if (result.length != 0) {
+            resdata.code = 200
+            resdata.success = true
+            resdata.data = '成功删除用户'
+            res.json(resdata)
+        }
     })
 }

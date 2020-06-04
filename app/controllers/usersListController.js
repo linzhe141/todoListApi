@@ -9,16 +9,16 @@ exports.loginUsers = function (req, res) {
         username,
         password
     }
-    console.log(params)
     usersListRepository.listLoginUsers(params, (result)=>{
         var resdata = {}
         if (result.length == 0){
             resdata.code = 200
             resdata.success = false
-            resdata.msg = "用户未注册，请注册"
+            resdata.msg = "用户账号出错"
             res.json(resdata)
         } else {
             if (result[0].password == params.password) {
+                //发送token
                 var jwt = new JwtUtil(params.username)
                 var token = jwt.generateToken()
                 resdata.code = 200
@@ -39,31 +39,68 @@ exports.loginUsers = function (req, res) {
 }
 
 exports.listAllUsers = function (req, res) {
-    console.log('function', usersListRepository.listAllUsers)
     usersListRepository.listAllUsers((result)=>{
-        console.log(result)
-        res.json(result)
-        return result
+        var resdata = {}
+        if (result.length != 0) {
+            resdata.code = 200
+            resdata.success = true
+            resdata.data = result
+            res.json(resdata)
+        }
     })
-    
-    
 }
-exports.createUsers = function(req, res) {
-    usersListRepository.createUsers(req.body)
-    res.status(201).end()
-}
+
 exports.readUsers = function(req, res) {
-    const users = usersListRepository.findUsersBy(req.params.usersID)
-    console.log(users)
-    res.json(users)
+    usersListRepository.findUsersBy(req.params.usersID,(result)=>{
+        var resdata = {}
+        if (result.length != 0) {
+            resdata.code = 200
+            resdata.success = true
+            resdata.data = result
+            res.json(resdata)
+        }
+    })
 }
 exports.updateUsers = function(req, res) {
-    const users = usersListRepository.updateUsers(req.params.usersID,req.body)
-    res.json(users)
+    usersListRepository.updateUsers(req.params.usersID,req.params.usersID,(result)=>{
+        var resdata = {}
+        if (result.length != 0) {
+            resdata.code = 200
+            resdata.success = true
+            resdata.data = '重置密码成功'
+            res.json(resdata)
+        }
+    })
+    
+    //res.json(users)
 }
 exports.deleteUsers = function(req, res) {
-    usersListRepository.deleteUsersBy(req.params.usersID)
-    res.json({
-        message: 'Users successfully deleted'
+    usersListRepository.deleteUsersBy(req.params.usersID,result=>{
+        var resdata = {}
+        if (result.length != 0) {
+            resdata.code = 200
+            resdata.success = true
+            resdata.data = '成功删除用户'
+            res.json(resdata)
+        }
     })
+   
+}
+
+exports.changePwd = function(req, res) {
+    var params = {
+        username: req.params.userID,
+        password: req.body.password
+    }
+    console.log(params)
+    usersListRepository.changePwd(params,result=>{
+        var resdata = {}
+        if (result.length != 0) {
+            resdata.code = 200
+            resdata.success = true
+            resdata.data = '密码重置成功'
+            res.json(resdata)
+        }
+    })
+   
 }

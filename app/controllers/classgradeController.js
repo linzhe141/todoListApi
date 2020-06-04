@@ -1,4 +1,28 @@
 const formatter = require('../../tools')
 const classgradeRepository = require('../repositories/classgradeRepository')
 
-// 查看全部作业信息
+
+exports.listClassgrade = function(req, res) {
+    classgradeRepository.listClassgrade(result=>{
+        var resdata = {}
+        if (result.length != 0) {
+            resdata.code = 200
+            resdata.success = true
+            resdata.data = result
+            res.json(resdata)
+        }
+    })
+   
+}
+exports.readClassgrade = function(req, res) {
+    classgradeRepository.readClassgrade(req.params.classID,result=>{
+        var resdata = {}
+        if (result.length != 0) {
+            resdata.code = 200
+            resdata.success = true
+            resdata.data = result
+            res.json(resdata)
+        }
+    })
+   
+}
